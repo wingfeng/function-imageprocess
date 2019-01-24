@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace TestProject
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTestImageProcess
     {
         private static IImageEncoder GetEncoder(string extension, int quality = 100)
         {
@@ -59,8 +59,7 @@ namespace TestProject
             var command = new Command
             {
                 Name = "resize",
-                Width = 400,
-                Height = 100,
+                Width = 400,              
                 IsStretch = false,
             };
             Image<Rgba32> image = Image.Load(ImageSrcPath);

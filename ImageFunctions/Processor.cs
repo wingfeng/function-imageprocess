@@ -55,7 +55,7 @@ namespace ImageFunctions
 
         private  Image<Rgba32> resize(Image<Rgba32> src, int width, int? height = null, bool isStretch = true)
         {
-            var divisor = src.Width / width;
+            var divisor = (decimal)src.Width / width;
             if (height == null)
                 height = Convert.ToInt32(Math.Round((decimal)(src.Height / divisor)));
 
