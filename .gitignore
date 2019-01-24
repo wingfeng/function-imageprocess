@@ -332,3 +332,5 @@ ASALocalRun/
 
 # Functions local settings
 local.settings.json
+#Sample images
+TestProject/*.jpg
