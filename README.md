@@ -37,7 +37,7 @@
   }
 ```
 通过指定width和height缩放到指定像素大小。当height不指定时根据width的比例自动缩放。
-###crop
+### crop
 ```json
   {
     "command": "crop",
@@ -48,7 +48,7 @@
   }
  ```
  通过x,y值指定剪裁的起始位置。width和height指定剪裁的大小
- ###round
+ ### round
  ```json
   {
     "command": "round",
@@ -61,14 +61,21 @@
   }
  ```
  通过指定width和height来缩放图片，并且指定radius来指定圆角的半径
- ###watermark
+ 
+ ### watermark
  ```json
+ {
+	"command":"watermark",
+	"watermark_url":"http://www.sample.com/watermark.png",
+	"pos":0,
+	"opacity":100
+}
  ```
  给图片打水印
  1.watermark_url :水印图片的地址
  2.pos:水印图片的位置(0:左上，1：右上，2：左下，3：右下,4:中间)
  3.opacity:水印图片的不透明度（0-100),0是完全透明，100是完全不透明。
- ###combo
+ ### combo
  组合命令，通过commands中的command来组合处理图片，譬如是先剪裁再缩放再加圆角操作
  ```json
   {
@@ -94,7 +101,7 @@
         }
   }
  ```
- ###Command中的output设置
+ ### Command中的output设置
  ```json
    "output": {
           "format": "jpg",
