@@ -1,0 +1,11 @@
+
+  [
+    {
+      "command": "resize",
+      "width": "400",
+      "output": {
+        "format": "jpg",
+        "quality": 90
+      }
+    }    
+  ]

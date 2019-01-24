@@ -88,7 +88,7 @@ namespace ImageFunctions
                     if (encoder != null)
                     {
                         var thumbnailWidth = Convert.ToInt32(Environment.GetEnvironmentVariable("THUMBNAIL_WIDTH"));
-                        var thumbContainerName = Environment.GetEnvironmentVariable("THUMBNAIL_CONTAINER_NAME");
+                        var thumbContainerName = Environment.GetEnvironmentVariable("SRC_CONTAINER_NAME");
                         var storageAccount = CloudStorageAccount.Parse(BLOB_STORAGE_CONNECTION_STRING);
                         var blobClient = storageAccount.CreateCloudBlobClient();
                         var container = blobClient.GetContainerReference(thumbContainerName);
@@ -98,13 +98,7 @@ namespace ImageFunctions
                         using (var output = new MemoryStream())
                         using (Image<Rgba32> image = Image.Load(input))
                         {
-                            var divisor = image.Width / thumbnailWidth;
-                            var height = Convert.ToInt32(Math.Round((decimal)(image.Height / divisor)));
-
-                            image.Mutate(x => x.Resize(thumbnailWidth, height));
-                            image.Save(output, encoder);
-                            output.Position = 0;
-                            await blockBlob.UploadFromStreamAsync(output);
+                            resize(image, thumbnailWidth);
                         }
                     }
                     else
@@ -118,6 +112,29 @@ namespace ImageFunctions
                 log.LogInformation(ex.Message);
                 throw;
             }
+        }
+
+        private static Image<Rgba32> resize(Image<Rgba32> src,int width,int? height=null,bool isStretch=true)
+        {
+            var divisor = src.Width / width;
+            if(height==null)
+              height = Convert.ToInt32(Math.Round((decimal)(src.Height / divisor)));
+
+            src.Mutate(x => x.Resize(width, (int)height));
+            return src;
+            //image.Save(output, encoder);
+            //output.Position = 0;
+            //await blockBlob.UploadFromStreamAsync(output);
+        }
+
+        private static Image<Rgba32> waterMark(Image<Rgba64> src,Image<Rgba32> mark,int x,int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static Image<Rgba32> crop(int x ,int y,int width,int weight,bool isSmart)
+        {
+            throw new NotImplementedException();
         }
     }
 }
