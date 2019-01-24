@@ -59,7 +59,7 @@ namespace TestProject
             var command = new Command
             {
                 Name = "resize",
-                Width = 400,              
+                Width = 400,
                 IsStretch = false,
             };
             Image<Rgba32> image = Image.Load(ImageSrcPath);
@@ -125,6 +125,59 @@ namespace TestProject
             }
         }
         [TestMethod]
+        public void TestWaterMark()
+        {
+
+            var command = new Command
+            {
+                Name = "combo",
+                Commands = new Command[]
+               {
+                   new Command()
+                   {
+                        Name = "watermark",
+                    WaterMarkPath= @"D:\github\function-image-upload-resize\TestProject\watermark.png",
+                    Pos = 0,
+                    Opacity = 10f
+                   },
+                   new Command()
+                   {
+                        Name = "watermark",
+                    WaterMarkPath= @"D:\github\function-image-upload-resize\TestProject\watermark.png",
+                    Pos = 1,
+                    Opacity = 20f
+                   },
+                    new Command()
+                   {
+                        Name = "watermark",
+                    WaterMarkPath= @"D:\github\function-image-upload-resize\TestProject\watermark.png",
+                    Pos = 2,
+                    Opacity = 50f
+                   },
+                   new Command()
+                   {
+                        Name = "watermark",
+                    WaterMarkPath= @"https://wingshare.blob.core.chinacloudapi.cn/vip/imagesharp-logo.png",
+                    Pos = 3,
+                    Opacity = 80f
+                   },
+                   new Command()
+                   {
+                        Name = "watermark",
+                    WaterMarkPath= @"https://wingshare.blob.core.chinacloudapi.cn/vip/imagesharp-logo.png",
+                    Pos = 4,
+                    Opacity = 100f
+                   }
+               }
+
+            };
+            Image<Rgba32> image = Image.Load(ImageSrcPath);
+            var processor = new Processor(image, command);
+            image = processor.Process();
+            processOutput(command, image, "waterMark.jpg");
+
+        }
+        [TestMethod]
         public void TestCombo()
         {
             for (int i = 0; i < 10; i++)
@@ -159,7 +212,7 @@ namespace TestProject
                     {
                         Format = "gif"
                     }
-                    };
+                };
                 Image<Rgba32> image = Image.Load(ImageSrcPath);
                 var processor = new Processor(image, command);
                 image = processor.Process();

@@ -39,6 +39,13 @@ namespace ImageFunctions
                 case "round":
                     output = round(_src, _command.Width, (int)_command.Height, _command.RoundRadius);
                     break;
+                case "watermark":
+                    using (var waterMarkStream = _command.GetWatermarkStream())
+                    {
+                        Image<Rgba32> mark = Image.Load(waterMarkStream);
+                        output = waterMark(_src, mark, _command.Pos, _command.Opacity / 100);
+                    }
+                    break;
                 case "combo":
                     output = _src;
                     foreach(Command c in _command.Commands)
@@ -65,11 +72,43 @@ namespace ImageFunctions
             //output.Position = 0;
             //await blockBlob.UploadFromStreamAsync(output);
         }
-
-        private  Image<Rgba32> waterMark(Image<Rgba64> src, Image<Rgba32> mark, int x, int y)
+        private Image<Rgba32> waterMark(Image<Rgba32> src,Image<Rgba32> mark,int pos,float opacity)
         {
-        
-            throw new NotImplementedException();
+            var location = new Point();
+            switch (pos)
+            {
+                case 0://top left;
+                    location.X = 0;
+                    location.Y = 0;
+                    break;
+                case 1: //top right
+                    location.X = src.Width-mark.Width;
+                    location.Y = 0;
+                    break;
+                case 2://bottom left;
+                    location.X = 0;
+                    location.Y = src.Height - mark.Height;
+                    break;
+                case 3://bottom right
+                    location.X = src.Width - mark.Width;
+                    location.Y = src.Height - mark.Height;
+                    break;
+                case 4://central
+                    location.X = src.Width / 2 - mark.Width / 2;
+                    location.Y = src.Height / 2 - mark.Height / 2;
+                    break;
+            }
+            location.X = location.X < 0 ? 0 : location.X;
+            location.Y = location.Y < 0 ? 0 : location.Y;
+          return  waterMark(src, mark, location, opacity);
+        }
+        private  Image<Rgba32> waterMark(Image<Rgba32> src, Image<Rgba32> mark, Point location,float opacity)
+        {
+            var result = src.Clone();
+            GraphicsOptions options = new GraphicsOptions();
+         
+            result.Mutate( o=> o.DrawImage(mark, opacity, location));
+            return result;
         }
 
         private  Image<Rgba32> crop(Image<Rgba32> src, int x, int y, int width, int height, bool isSmart=false)
